@@ -9,7 +9,7 @@ import (
 	"sync"
 	"text/template"
 
-	"github.com/matryer/goblueprints/chapter1/trace"
+	trace "github.com/kubatrt/goTrace"
 )
 
 type templateHandler struct {

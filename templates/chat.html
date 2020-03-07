@@ -42,7 +42,7 @@
             if(!window["WebSocket"]) {
                 alert("Error: your web browser doesn't support WebSocket.");
             } else {
-                
+                // request.Host
                 socket = new WebSocket("ws://{{.Host}}/room");
                 socket.onclose = function() {
                     alert("Connection has been closed!");
