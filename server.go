@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -23,7 +22,7 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.once.Do(func() {
 		t.templ = template.Must(template.ParseFiles(filepath.Join("templates", t.filename)))
 	})
-	t.templ.Execute(w, nil)
+	t.templ.Execute(w, r)
 }
 
 const version = 0.2
@@ -33,7 +32,6 @@ func main() {
 	flag.Parse()
 
 	//u := url.URL{Scheme: "ws", Host: *addr, Path: "/"}
-	fmt.Println("Starting chat server: ", *addr)
 
 	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
@@ -44,7 +42,7 @@ func main() {
 
 	go r.run()
 
-	// run server
+	log.Println("Starting chat server:", *addr)
 	if err := http.ListenAndServe(*addr, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
