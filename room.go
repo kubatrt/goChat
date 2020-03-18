@@ -48,7 +48,6 @@ func (r *room) run() {
 			// send message to all connected clients
 			for client := range r.clients {
 				client.send <- msg
-				r.tracer.Trace("sent to client")
 			}
 		}
 	}
@@ -59,7 +58,6 @@ const (
 	messageBufferSize = 256
 )
 
-// to use socket its reqauired to 'upgrade' HTTP connection
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  socketBufferSize,
 	WriteBufferSize: messageBufferSize,
@@ -80,6 +78,6 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	r.join <- client
 	defer func() { r.leave <- client }()
-	go client.write() // start goroutine
-	client.read()     // in main thread
+	go client.write()
+	client.read() // run in main thread
 }
