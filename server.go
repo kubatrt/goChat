@@ -25,7 +25,7 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.templ.Execute(w, r)
 }
 
-const version = 0.2
+const version = 0.3
 
 func main() {
 	var addr = flag.String("addr", "localhost:8080", "http service address")
@@ -36,7 +36,8 @@ func main() {
 	r := newRoom()
 	r.tracer = trace.New(os.Stdout)
 
-	http.Handle("/", MustAuth(&templateHandler{filename: "chat.html"}))
+	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
+	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.Handle("/room", r)
 
 	go r.run()
